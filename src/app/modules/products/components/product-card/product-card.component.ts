@@ -12,15 +12,17 @@ import { ProductImagePipe } from '@products/pipes/product-image.pipe';
   template: `
     <div class="card card-compact bg-base-100 shadow-xl animate-fadeIn">
       <figure>
-        <img [src]="product().images | productImage " [alt]="product().title" />
+        <img [src]="product().images | productImage" [alt]="product().title" />
       </figure>
       <div class="card-body">
-        <h2 class="card-title text-accent text-lg">{{ product().title }}</h2>
+        <h2 class="card-title text-accent text-lg hover:underline cursor-pointer" [routerLink]="['/product', product().slug]">
+          {{ product().title }}
+        </h2>
         <p>{{ product().description | slice: 0:70 }}...</p>
         <div class="card-actions justify-end">
           <a class="link link-accent" [routerLink]="['/product', product().slug]">View</a>
         </div>
-      </div>9
+      </div>
     </div>
   `,
 })

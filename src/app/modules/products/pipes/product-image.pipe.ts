@@ -18,5 +18,4 @@ export class ProductImagePipe implements PipeTransform {
 
     return `${baseUrl}/files/product/${image}`;
   }
-
 }

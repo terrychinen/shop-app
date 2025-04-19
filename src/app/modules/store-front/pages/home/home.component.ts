@@ -1,4 +1,4 @@
-import { Component, inject } from "@angular/core";
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ProductCardComponent } from '@products/components/product-card/product-card.component';
 import { ProductsService } from '@products/services/products.service';
 import { rxResource } from '@angular/core/rxjs-interop';
@@ -8,6 +8,7 @@ import { rxResource } from '@angular/core/rxjs-interop';
   imports: [
     ProductCardComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <h1 class="text-3xl font-bold">All products</h1>
     <h2 class="text-xl mb-5">Find your favorite product</h2>

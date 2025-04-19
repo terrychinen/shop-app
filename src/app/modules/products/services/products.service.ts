@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable, tap } from 'rxjs';
 
-import { ProductResponse } from '@products/models/responses/product.response.interface';
+import { Product, ProductResponse } from '@products/models/responses/product.response.interface';
 import { environment } from 'src/environments/environment';
 
 const baseUrl = environment.baseUrl;
@@ -25,7 +25,7 @@ export class ProductsService {
     }).pipe(tap(res => console.log(res)));
   }
 
-  getProductImg(imageName: string): Observable<string> {
-    return this._http.get<string>(`${baseUrl}/product/${imageName}`);
+  getProductsBySlugId(slugId: string): Observable<Product> {
+    return this._http.get<Product>(`${baseUrl}/products/${slugId}`);
   }
 }
