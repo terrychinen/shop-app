@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 
 import { Observable, of, tap } from 'rxjs';
 
-import { Product, ProductResponse } from '@products/models/responses/product.response.interface';
+import { Product, ProductResponse } from '@products/models/responses/product-response.interface';
 import { environment } from 'src/environments/environment';
 
 const baseUrl = environment.baseUrl;

@@ -2,7 +2,7 @@ import { SlicePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { Product } from '@products/models/responses/product.response.interface';
+import { Product } from '@products/models/responses/product-response.interface';
 import { ProductImagePipe } from '@products/pipes/product-image.pipe';
 
 @Component({

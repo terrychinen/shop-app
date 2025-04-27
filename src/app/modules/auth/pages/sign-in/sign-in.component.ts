@@ -1,47 +1,53 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'sign-in-page',
-  imports: [],
+  imports: [RouterLink, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <label class="input">
-      <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <g
-          stroke-linejoin="round"
-          stroke-linecap="round"
-          stroke-width="2.5"
-          fill="none"
-          stroke="currentColor"
-        >
-          <circle cx="11" cy="11" r="8"></circle>
-          <path d="m21 21-4.3-4.3"></path>
-        </g>
-      </svg>
-      <input type="search" class="grow" placeholder="Search" />
-      <kbd class="kbd kbd-sm">⌘</kbd>
-      <kbd class="kbd kbd-sm">K</kbd>
-    </label>
-    <label class="input">
-      <svg class="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-        <g
-          stroke-linejoin="round"
-          stroke-linecap="round"
-          stroke-width="2.5"
-          fill="none"
-          stroke="currentColor"
-        >
-          <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"></path>
-          <path d="M14 2v4a2 2 0 0 0 2 2h4"></path>
-        </g>
-      </svg>
-      <input type="text" class="grow" placeholder="index.php" />
-    </label>
-    <label class="input">
-      Path
-      <input type="text" class="grow" placeholder="src/app/" />
-      <span class="badge badge-neutral badge-xs">Optional</span>
-    </label>
+    <form class="flex flex-col gap-2" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <input type="text" placeholder="Email" class="input" formControlName="email" />
+      <input type="password" placeholder="password" class="input" formControlName="password" />
+
+      <button type="submit" class="btn btn-secondary">Login</button>
+
+      <p class="text-slate-700">
+        Create your account
+        <a routerLink="/auth/sign-up" class="text-secondary">here</a>
+      </p>
+    </form>
+
+    @if (hasError()) {
+      <div role="alert" class="alert alert-error fixed top-5 right-5 w-60">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>User account has error!</span>
+      </div>
+    }
   `,
 })
-export class SignInComponent {}
+export class SignInComponent {
+  formBuilder = inject(FormBuilder);
+  hasError = signal(false);
+  isPosting = signal(false);
+
+  form = this.formBuilder.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required]],
+  });
+
+  onSubmit(): void {
+    if (this.form.invalid) {
+      this.hasError.set(true);
+      setTimeout(() => {
+        this.hasError.set(false);
+      }, 2000);
+      return;
+    }
+
+    const { email, password } = this.form.value;
+  }
+}
