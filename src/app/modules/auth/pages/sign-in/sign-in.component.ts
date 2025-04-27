@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+
+import { AuthService } from '@auth/services/auth.service';
 
 @Component({
   selector: 'sign-in-page',
@@ -31,6 +33,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 })
 export class SignInComponent {
   formBuilder = inject(FormBuilder);
+  auth = inject(AuthService);
+  router = inject(Router);
+
   hasError = signal(false);
   isPosting = signal(false);
 
@@ -42,12 +47,20 @@ export class SignInComponent {
   onSubmit(): void {
     if (this.form.invalid) {
       this.hasError.set(true);
-      setTimeout(() => {
-        this.hasError.set(false);
-      }, 2000);
+      setTimeout(() => this.hasError.set(false), 2000);
       return;
     }
 
     const { email, password } = this.form.value;
+
+    this.auth.signIn(email!, password!).subscribe(isAuthenticated => {
+      if (isAuthenticated) {
+        this.router.navigateByUrl('/');
+        return;
+      }
+
+      this.hasError.set(true);
+      setTimeout(() => this.hasError.set(false), 2000);
+    });
   }
 }

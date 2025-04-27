@@ -9,7 +9,6 @@ import { User } from './entities/user.entity';
 import { LoginUserDto, CreateUserDto } from './dto';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 
-
 @Injectable()
 export class AuthService {
 
@@ -22,11 +21,11 @@ export class AuthService {
 
 
   async create( createUserDto: CreateUserDto) {
-    
+
     try {
 
       const { password, ...userData } = createUserDto;
-      
+
       const user = this.userRepository.create({
         ...userData,
         password: bcrypt.hashSync( password, 10 )
@@ -56,9 +55,9 @@ export class AuthService {
       select: { email: true, password: true, id: true, fullName: true, isActive: true, roles: true}
     });
 
-    if ( !user ) 
+    if ( !user )
       throw new UnauthorizedException('Credentials are not valid (email)');
-      
+
     if ( !bcrypt.compareSync( password, user.password ) )
       throw new UnauthorizedException('Credentials are not valid (password)');
 
@@ -80,7 +79,7 @@ export class AuthService {
   }
 
 
-  
+
   private getJwtToken( payload: JwtPayload ) {
     const token = this.jwtService.sign( payload );
     return token;
@@ -90,7 +89,7 @@ export class AuthService {
   private handleDBErrors( error: any ): never {
 
 
-    if ( error.code === '23505' ) 
+    if ( error.code === '23505' )
       throw new BadRequestException( error.detail );
 
     console.log(error)
