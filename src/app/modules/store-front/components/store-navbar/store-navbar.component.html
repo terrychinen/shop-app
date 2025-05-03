@@ -61,7 +61,20 @@
     </ul>
   </div>
 
-  <div class="navbar-end">
-    <a class="btn">Button</a>
+  <div class="navbar-end gap-4">
+    @if (auth.authStatus() === 'authenticated') {
+      <button class="btn btn-ghost">
+        {{ auth.user()?.fullName }}
+      </button>
+      <button class="btn btn-sm btn-error" (click)="auth.logout()">Logout</button>
+    }
+
+    @else if (auth.authStatus() === 'not-authenticated') {
+      <a routerLink="/auth/sign-in" class="btn btn-primary">Sign in</a>
+    }
+
+    @else {
+      <button class="btn btn-ghost">...</button>
+    }
   </div>
 </div>
